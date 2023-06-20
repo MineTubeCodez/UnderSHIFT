@@ -1,4 +1,4 @@
-const { ActivityType, Client, Presence } = require("discord.js");
+const { ActivityType, Client, PresenceUpdateStatus } = require("discord.js");
 
 /**
  * 
@@ -9,6 +9,7 @@ module.exports = (client) => {
     client.user.setActivity({
         name: 'Under Shift',
         type: ActivityType.Playing
-    })
+    });
+    client.user.setStatus("dnd");
 };
   
