@@ -31,3 +31,21 @@ const client = new Client({
     console.log(`Error: ${error}`);
   }
 })();
+
+(async () => {
+  process.openStdin();
+
+  process.stdin.addListener("data",(data) => {
+    const message = data.toString();
+
+    console.log("Recieved:" + message)
+
+    if(message == "shutdown") {
+      console.log("Shuting down....")
+      process.exit(0);
+    } else if(message == "error") {
+      console.log("Throwing test error...")
+      throw new Error("Manual Caused Error")
+    }
+  }); 
+})();
