@@ -3,7 +3,10 @@ const {
   Interaction,
   ApplicationCommandOptionType,
   PermissionFlagsBits,
-  EmbedBuilder
+  EmbedBuilder,
+  ButtonStyle,
+  ButtonBuilder,
+  ActionRowBuilder
 } = require('discord.js');
 const Punishment = require("../../models/Punishment");
 module.exports = {
@@ -80,9 +83,19 @@ module.exports = {
         }
       );
 
+      const appealButton = new ButtonBuilder()
+  .setCustomId("appealPunish")
+  .setEmoji("💬")
+  .setStyle(ButtonStyle.Success)
+  .setLabel("Appeal Punishment");
+
+  const row = new ActionRowBuilder()
+  .addComponents(appealButton)
+
       await targetUser.send({
         content: 'Hello, Im here to say that this happened.',
-        embeds:[embedToSend]
+        embeds:[embedToSend],
+        components:[row]
       });
 
       await targetUser.ban({ reason });

@@ -1,4 +1,4 @@
-const { Client, Interaction, ApplicationCommandOptionType, PermissionFlagsBits, EmbedBuilder } = require('discord.js');
+const { Client, Interaction, ApplicationCommandOptionType, PermissionFlagsBits, EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder } = require('discord.js');
 const ms = require('ms');
 
 const Punishment = require("../../models/Punishment");
@@ -17,12 +17,12 @@ module.exports = {
 
     const targetUser = await interaction.guild.members.fetch(mentionable);
     if (!targetUser) {
-      await interaction.editReply("That user doesn't exist in this server.");
+      await interaction.reply("That user doesn't exist in this server.");
       return;
     }
 
     if (targetUser.user.bot) {
-      await interaction.editReply("I can't warn a bot.");
+      await interaction.reply("I can't warn a bot.");
       return;
     }
 
@@ -31,7 +31,7 @@ module.exports = {
     const botRolePosition = interaction.guild.members.me.roles.highest.position; // Highest role of the bot
 
     if (targetUserRolePosition >= requestUserRolePosition) {
-      await interaction.editReply("You can't warn that user because they have the same/higher role than you.");
+      await interaction.reply("You can't warn that user because they have the same/higher role than you.");
       return;
     }
 
@@ -63,9 +63,19 @@ module.exports = {
         }
       );
 
+      const appealButton = new ButtonBuilder()
+  .setCustomId("appealPunish")
+  .setEmoji("💬")
+  .setStyle(ButtonStyle.Success)
+  .setLabel("Appeal Punishment");
+
+  const row = new ActionRowBuilder()
+  .addComponents(appealButton)
+
       targetUser.send({
         content: 'Hello, Im here to say that this happened.',
-        embeds:[embedToSend]
+        embeds:[embedToSend],
+        components:[row]
       });
 
       // Auto-Warn procedure
@@ -142,7 +152,7 @@ module.exports = {
             embeds:[autoModEmbed]
         });
       } else {
-        await interaction.reply(`${targetUser} was timed warned.\nReason: ${reason}\nPunishment ID: ${punishment.punshimentId}`);
+        await interaction.reply(`${targetUser} was warned.\nReason: ${reason}\nPunishment ID: ${punishment.punshimentId}`);
       }
     } catch (error) {
       console.log(`There was an error when timing out: ${error}`);

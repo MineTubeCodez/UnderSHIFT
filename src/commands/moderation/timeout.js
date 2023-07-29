@@ -1,4 +1,4 @@
-const { Client, Interaction, ApplicationCommandOptionType, PermissionFlagsBits, EmbedBuilder } = require('discord.js');
+const { Client, Interaction, ApplicationCommandOptionType, PermissionFlagsBits, EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder } = require('discord.js');
 const ms = require('ms');
 
 const Punishment = require("../../models/Punishment");
@@ -96,9 +96,19 @@ module.exports = {
         }
       );
 
+      const appealButton = new ButtonBuilder()
+  .setCustomId("appealPunish")
+  .setEmoji("💬")
+  .setStyle(ButtonStyle.Success)
+  .setLabel("Appeal Punishment");
+
+  const row = new ActionRowBuilder()
+  .addComponents(appealButton)
+
       targetUser.send({
         content: 'Hello, Im here to say that this happened.',
-        embeds:[embedToSend]
+        embeds:[embedToSend],
+        components:[row]
       });
 
       await interaction.editReply(`${targetUser} was timed out for ${prettyMs(msDuration, { verbose: true })}.\nReason: ${reason}\nPunishment ID: ${punishment.punshimentId}`);

@@ -10,7 +10,8 @@ const { Client, Message, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonSt
 module.exports = async (client, message) => {
   if (message.inGuild() || message.author.bot) return;
 
-  const embed = new EmbedBuilder()
+  if(message.content == "?info") {
+    const embed = new EmbedBuilder()
   .setColor('Green')
   .setTitle("Under SHIFT")
   .setDescription("Under Shift is a general purpose discord bot with an moderation, economy system built in.");
@@ -44,4 +45,42 @@ module.exports = async (client, message) => {
         components: [actionRow2, actionRow]
     }
   );
+  return
+  }
+
+  if(message.content == "?joinmyserver") {
+    const embed = new EmbedBuilder()
+  .setColor('Green')
+  .setTitle("Under SHIFT")
+  .setDescription("Press the link button below for me to join your server!");
+
+  const botButton = new ButtonBuilder()
+  .setStyle(ButtonStyle.Link)
+  .setLabel("Bot Invite")
+  .setURL("https://discord.com/api/oauth2/authorize?client_id=1119317945739382834&permissions=8&scope=applications.commands%20bot");
+
+  const actionRow2 = new ActionRowBuilder()
+  .addComponents(botButton);
+
+  const newMessage = await message.channel.send(
+    {
+        embeds: [embed],
+        components: [actionRow2]
+    }
+  );
+  return
+  }
+
+  const embed = new EmbedBuilder()
+  .setColor('Red')
+  .setTitle("Under SHIFT")
+  .setDescription("Unreconginesed Command.")
+  .addFields({
+    name: 'Commands',
+    value: '?info, ?joinmyserver'
+  });
+
+  message.channel.send({
+    embeds: [embed]
+  })
 };
